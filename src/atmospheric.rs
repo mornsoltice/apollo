@@ -20,15 +20,28 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-pub mod angle;
-pub mod asteroid;
-pub mod atmospheric;
-pub mod binary_star;
-pub mod coordinate;
-pub mod ecliptic;
-pub mod interpol;
-pub mod lunar;
-pub mod star;
-pub mod time;
+// !---------ATMOSPHERIC REFRACTION----------!
 
-pub mod planet;
+use crate::angle;
+use std::f64::consts::PI;
+
+/*
+Computes the refraction term for true altitudes greater than 15
+degrees
+
+# Returns
+
+* `refrac_term`: The refraction term *| in radians*, that needs to be
+                 subtracted from the apparent altitude to get the
+                 true altitude
+
+# Arguments
+
+* `apprnt_alt`: Apparent altitude *| in radians*
+*/
+
+pub fn refrac_apparent_altitude_15(apprnt_alt: f64) -> f64 {
+    let x = angle::deg_dmas(0, 0, 0.0668).to_radians() * (PI - apprnt_alt).tan();
+
+    angle::deg_dmas(0, 0, 58.294).to_radians() * (PI - apprnt_alt).tan() - x * x * x
+}

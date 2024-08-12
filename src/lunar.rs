@@ -20,15 +20,41 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-pub mod angle;
-pub mod asteroid;
-pub mod atmospheric;
-pub mod binary_star;
-pub mod coordinate;
-pub mod ecliptic;
-pub mod interpol;
-pub mod lunar;
-pub mod star;
-pub mod time;
+use crate::angle;
+use crate::coordinate;
+use crate::time;
 
-pub mod planet;
+/*
+Computes the equatorial horizontal parallax of the Moon
+
+# Returns
+
+* `eq_hz_parllx`: Equatorial horizontal parallax of the
+                  Moon *| in radians*
+
+# Arguments
+
+* `earth_moon_dist`: Earth-Moon distance *| in kilometers*
+*/
+
+#[inline]
+pub fn horizontal_parallax(earth_moon_dist: f64) -> f64 {
+    (6378.14 / earth_moon_dist).asin()
+}
+
+/*
+Computes the equatorial semidiameter of the Moon
+
+# Returns
+
+* `eq_semidiameter`: Geocentric equatorial semidiameter
+                     *| in radians per kilometers*
+
+# Arguments
+
+* `earth_moon_dist`: Earth-Moon distance *| in kilometers*
+*/
+
+pub fn semidiameter(earth_moon_dist: f64) -> f64 {
+    0.272481 * horizontal_parallax(earth_moon_dist).sin()
+}
